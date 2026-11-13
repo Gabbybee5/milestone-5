@@ -13,7 +13,7 @@ website:
       - href: tracking-patterns.qmd
         text: "Tracking Patterns"
       - href: findings.qmd
-        text: "What the Data Tells Us"
+        text: "Meet the Sharks"
       - href: why-compare.qmd
         text: "Ecology & Conservation"
 

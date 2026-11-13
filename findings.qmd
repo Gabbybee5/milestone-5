@@ -104,24 +104,74 @@ main.content.page-columns {
   font-weight: 700;
 }
 
+.shark-deck-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.9rem 0 0.75rem 0;
+}
+
+.deck-counter {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.deck-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.action-btn {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.38rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+.action-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.action-btn.surprise-btn {
+  background: #f0fdfa;
+  color: #0f766e;
+  border-color: #99f6e4;
+}
+
+.action-btn.surprise-btn:hover {
+  background: #ccfbf1;
+}
+
 .shark-selector-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 1rem 0 1.25rem 0;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .shark-pill {
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: #334155;
-  background: #f1f5f9;
+  background: #f8fafc;
   border: 1px solid #cbd5e1;
   border-radius: 999px;
-  padding: 0.38rem 0.85rem;
+  padding: 0.35rem 0.8rem;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
@@ -137,52 +187,189 @@ main.content.page-columns {
   border-color: #0d3b66;
 }
 
+.shark-cards-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+}
+
+.shark-cards-stage.grid-all-mode {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .shark-subsection {
   display: none;
-  background: #f8fafc;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-left: 4px solid #0f766e;
-  border-radius: 10px;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1rem;
+  border-top: 4px solid #0f766e;
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  animation: fadeSlideIn 0.22s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .shark-subsection.visible {
   display: block;
 }
 
+.shark-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.shark-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.shark-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0d3b66 0%, #0f766e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .shark-subsection h3 {
-  margin: 0 0 0.6rem 0;
-  font-size: 1.18rem;
-  font-weight: 700;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
   color: #0f172a;
+}
+
+.fav-btn {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.fav-btn:hover {
+  border-color: #fda4af;
+  color: #e11d48;
+  background: #fff1f2;
+}
+
+.fav-btn.favorited {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
 }
 
 .shark-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.85rem;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+/* Hide middle 3 chips since they are displayed cleanly in the visual stat bars */
+.shark-meta .meta-chip.stat-chip-hidden {
+  display: none;
 }
 
 .meta-chip {
   font-size: 0.78rem;
   font-weight: 600;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  border: 1px solid #dbe4ee;
+  color: #334155;
+  padding: 0.24rem 0.68rem;
+  border-radius: 999px;
+}
+
+.shark-meters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.meter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.meter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.meter-val {
+  font-size: 0.84rem;
+  font-weight: 700;
   color: #0f172a;
-  padding: 0.22rem 0.65rem;
-  border-radius: 6px;
+}
+
+.meter-track {
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.1rem;
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0284c7 0%, #0f766e 100%);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .shark-subsection ul {
   margin: 0;
-  padding-left: 1.2rem;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.shark-cards-stage.grid-all-mode .shark-subsection ul {
+  grid-template-columns: 1fr;
 }
 
 .shark-subsection li {
-  margin-bottom: 0.45rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0284c7;
+  border-radius: 10px;
+  padding: 0.8rem 0.95rem;
+  margin: 0;
   line-height: 1.55;
+  font-size: 0.93rem;
+}
+
+.shark-subsection li:last-child {
+  border-left-color: #0f766e;
 }
 
 .seasonal-grid {
@@ -198,55 +385,248 @@ main.content.page-columns {
 }
 
 @media (max-width: 780px) {
-  .seasonal-grid {
+  .seasonal-grid,
+  .shark-cards-stage.grid-all-mode,
+  .shark-meters,
+  .shark-subsection ul {
     grid-template-columns: 1fr;
   }
 }
 </style>
 <script>
-function selectShark(sharkId, btnEl) {
+const SHARK_ORDER = [
+  'megashark', 'alexios', 'ali', 'sharpie', 'juanita', 'gbr1',
+  'beizam', 'blancpain', 'gbr2', 'infamis', 'jaap', 'halliday',
+  'hugh', 'fifty_fathoms', 'sapphire', 'andrew', 'dotti', 'ambitious'
+];
+
+const AVATAR_GRADIENTS = [
+  'linear-gradient(135deg, #0d3b66 0%, #0f766e 100%)',
+  'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)',
+  'linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%)',
+  'linear-gradient(135deg, #115e59 0%, #0369a1 100%)',
+  'linear-gradient(135deg, #0f172a 0%, #0e7490 100%)',
+  'linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%)'
+];
+
+let currentSharkId = 'megashark';
+let favoriteSharks = new Set();
+
+try {
+  const saved = JSON.parse(localStorage.getItem('ws_favorites') || '[]');
+  if (Array.isArray(saved)) favoriteSharks = new Set(saved);
+} catch (e) {}
+
+function whaleSharkSvg() {
+  return `<svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M8 33C14 23 27 19 42 22C49 23.5 54 20 58 15C57 22 55 27 56 32C55 37 57 42 58 49C54 44 49 40.5 42 42C27 45 14 41 8 33Z" fill="#e0f2fe"/>
+    <path d="M29 21L34 11L38 21.5" fill="#bae6fd"/>
+    <path d="M24 41L29 51L34 42" fill="#7dd3fc"/>
+    <circle cx="15" cy="31" r="1.8" fill="#0f172a"/>
+    <circle cx="24" cy="28" r="1.5" fill="#0284c7"/>
+    <circle cx="29" cy="31" r="1.4" fill="#0284c7"/>
+    <circle cx="25" cy="35" r="1.4" fill="#0284c7"/>
+    <circle cx="34" cy="27" r="1.5" fill="#0284c7"/>
+    <circle cx="35" cy="33" r="1.5" fill="#0284c7"/>
+  </svg>`;
+}
+
+function syncPillHearts() {
   document.querySelectorAll('.shark-pill').forEach(function(btn) {
-    btn.classList.remove('active');
+    const sid = btn.getAttribute('data-shark');
+    const baseName = btn.getAttribute('data-label');
+    if (!sid || !baseName || sid === 'all') return;
+    btn.textContent = favoriteSharks.has(sid) ? '❤️ ' + baseName : baseName;
+  });
+}
+
+function updateCounter() {
+  const counter = document.getElementById('deck-counter');
+  if (!counter) return;
+  if (currentSharkId === 'all') {
+    counter.textContent = 'Showing all 18 Whale Sharks';
+  } else {
+    const idx = SHARK_ORDER.indexOf(currentSharkId);
+    counter.textContent = 'Whale Shark ' + (idx + 1) + ' of ' + SHARK_ORDER.length;
+  }
+}
+
+function animateVisibleMeters() {
+  document.querySelectorAll('.shark-subsection.visible .meter-fill').forEach(function(bar) {
+    const target = bar.getAttribute('data-target') || '0%';
+    bar.style.width = '0%';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        bar.style.width = target;
+      });
+    });
+  });
+}
+
+function selectShark(sharkId, btnEl) {
+  currentSharkId = sharkId;
+  document.querySelectorAll('.shark-pill').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-shark') === sharkId);
   });
   if (btnEl) btnEl.classList.add('active');
 
+  const stage = document.getElementById('shark-cards-stage');
+  if (stage) {
+    stage.classList.toggle('grid-all-mode', sharkId === 'all');
+  }
+
   document.querySelectorAll('.shark-subsection').forEach(function(sec) {
-    if (sharkId === 'all' || sec.id === 'shark-' + sharkId) {
-      sec.classList.add('visible');
-    } else {
-      sec.classList.remove('visible');
+    const sid = sec.id.replace('shark-', '');
+    sec.classList.toggle('visible', sharkId === 'all' || sid === sharkId);
+  });
+
+  updateCounter();
+  animateVisibleMeters();
+}
+
+function stepShark(delta) {
+  let idx = SHARK_ORDER.indexOf(currentSharkId);
+  if (idx === -1) idx = 0;
+  else idx = (idx + delta + SHARK_ORDER.length) % SHARK_ORDER.length;
+  selectShark(SHARK_ORDER[idx]);
+}
+
+function surpriseShark() {
+  const candidates = SHARK_ORDER.filter(function(id) { return id !== currentSharkId; });
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+  selectShark(pick);
+}
+
+function toggleFavorite(sharkId, btnEl) {
+  if (favoriteSharks.has(sharkId)) {
+    favoriteSharks.delete(sharkId);
+  } else {
+    favoriteSharks.add(sharkId);
+  }
+  const isFav = favoriteSharks.has(sharkId);
+  btnEl.classList.toggle('favorited', isFav);
+  btnEl.innerHTML = isFav ? '❤️ Favorited' : '🤍 Favorite';
+  try {
+    localStorage.setItem('ws_favorites', JSON.stringify(Array.from(favoriteSharks)));
+  } catch (e) {}
+  syncPillHearts();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.shark-pill').forEach(function(btn) {
+    const m = (btn.getAttribute('onclick') || '').match(/selectShark\('([^']+)'/);
+    if (m) {
+      btn.setAttribute('data-shark', m[1]);
+      btn.setAttribute('data-label', btn.textContent.trim());
     }
   });
-}
+
+  document.querySelectorAll('.shark-subsection').forEach(function(sec, idx) {
+    const sid = sec.id.replace('shark-', '');
+    const h3 = sec.querySelector('h3');
+    const chips = sec.querySelectorAll('.meta-chip');
+
+    const pingsText = chips[1] ? chips[1].textContent.trim() : '';
+    const spanText = chips[2] ? chips[2].textContent.replace(/^Span:\s*/, '').trim() : '';
+    const distText = chips[3] ? chips[3].textContent.replace(/^Min\.\s*Distance:\s*/, '').trim() : '';
+
+    if (chips[1]) chips[1].classList.add('stat-chip-hidden');
+    if (chips[2]) chips[2].classList.add('stat-chip-hidden');
+    if (chips[3]) chips[3].classList.add('stat-chip-hidden');
+
+    const pingsMatch = pingsText.match(/(\d+)/);
+    const monthsMatch = spanText.match(/^([\d.]+)/);
+    const kmMatch = distText.match(/~?([\d,]+)\s*km/);
+
+    const pings = pingsMatch ? Number(pingsMatch[1]) : 0;
+    const months = monthsMatch ? Number(monthsMatch[1]) : 0;
+    const km = kmMatch ? Number(kmMatch[1].replace(/,/g, '')) : 0;
+
+    if (h3) {
+      const header = document.createElement('div');
+      header.className = 'shark-card-header';
+
+      const identity = document.createElement('div');
+      identity.className = 'shark-identity';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'shark-avatar';
+      avatar.style.background = AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length];
+      avatar.innerHTML = whaleSharkSvg();
+
+      h3.parentNode.insertBefore(header, h3);
+      identity.appendChild(avatar);
+      identity.appendChild(h3);
+      header.appendChild(identity);
+
+      const favBtn = document.createElement('button');
+      favBtn.type = 'button';
+      const isFav = favoriteSharks.has(sid);
+      favBtn.className = 'fav-btn' + (isFav ? ' favorited' : '');
+      favBtn.innerHTML = isFav ? '❤️ Favorited' : '🤍 Favorite';
+      favBtn.onclick = function() { toggleFavorite(sid, favBtn); };
+      header.appendChild(favBtn);
+    }
+
+    const pingPct = Math.max(5, Math.min(100, Math.round((pings / 423) * 100)));
+    const monthPct = Math.max(5, Math.min(100, Math.round((months / 25.3) * 100)));
+    const kmPct = Math.max(5, Math.min(100, Math.round((km / 11378) * 100)));
+
+    const meters = document.createElement('div');
+    meters.className = 'shark-meters';
+    meters.innerHTML = `
+      <div class="meter-box">
+        <span class="meter-label">Transmissions</span>
+        <span class="meter-val">${pingsText}</span>
+        <div class="meter-track"><div class="meter-fill" data-target="${pingPct}%"></div></div>
+      </div>
+      <div class="meter-box">
+        <span class="meter-label">Tracking Span</span>
+        <span class="meter-val">${spanText}</span>
+        <div class="meter-track"><div class="meter-fill" data-target="${monthPct}%"></div></div>
+      </div>
+      <div class="meter-box">
+        <span class="meter-label">Min. Distance</span>
+        <span class="meter-val">${distText}</span>
+        <div class="meter-track"><div class="meter-fill" data-target="${kmPct}%"></div></div>
+      </div>
+    `;
+
+    const ul = sec.querySelector('ul');
+    if (ul) sec.insertBefore(meters, ul);
+  });
+
+  syncPillHearts();
+  updateCounter();
+  animateVisibleMeters();
+});
 </script>
 
 <div class="hero-banner">
   <div class="hero-eyebrow">Key Findings & Graph Breakdown</div>
-  <h1 class="hero-title">What the Whale Shark Data Specifically Tells Us</h1>
+  <h1 class="hero-title">Discover the Profiles of Each Individual Whale Shark Tracked</h1>
   <p class="hero-subtitle">
-    An overview of the Coral Sea dataset, ecological patterns, and the specific trajectories, deep-water plateaus, and seasonal surges across all 2,391 Whale Shark observations.
+    This project analyzes 2,391 whale shark (<em>Rhincodon typus</em>) observations in Australia's Coral Sea collected by the Biopixel Oceans Foundation and James Cook University. The dataset combines 2,255 satellite transmissions from 18 individually named sharks along the Great Barrier Reef and Coral Sea reefs with 136 opportunistic sightings recorded from 2007 to 2018. Explore the profiles below to see each shark's trajectory, deep-water plateaus, and seasonal surges.
   </p>
 </div>
 ```
 
 <div class="info-card">
 
-## Overview of the Dataset
-
-This project analyzes **2,391 observations** of **Whale Sharks (*Rhincodon typus*)** in Australia's Coral Sea collected by the Biopixel Oceans Foundation and James Cook University:
-
-1. **Satellite-Tagged Whale Sharks (2,255 transmissions):** High-resolution satellite tracking records from **18 individually named whale sharks** (including *Megashark*, *Alexios*, *Ali*, *Sharpie*, *Juanita*, and *GBR1*) tagged primarily along the northern Great Barrier Reef and Coral Sea reefs.
-2. **Opportunistic Coral Sea Sightings (136 sightings):** Visual and vessel-based sighting records spanning nearly **11 years (November 2007 to October 2018)**, providing a long-term baseline of whale shark presence across the region.
-
-</div>
-
-<div class="info-card">
-
 ## Ecological Patterns in the Plot — By Named Whale Shark
 
-Select any of the **18 satellite-tagged Whale Sharks** below (or click **Show All 18**) to inspect its biological profile, distance traveled, and what its specific curve on the scatter plot reveals:
+Pick any whale shark below, flip through with **Previous / Next**, or try **🎲 Random Shark** to meet each individual:
 
 ```{=html}
+<div class="shark-deck-nav">
+  <span id="deck-counter" class="deck-counter">Whale Shark 1 of 18</span>
+  <div class="deck-actions">
+    <button type="button" class="action-btn" onclick="stepShark(-1)">◀ Previous</button>
+    <button type="button" class="action-btn surprise-btn" onclick="surpriseShark()">🎲 Random Shark</button>
+    <button type="button" class="action-btn" onclick="stepShark(1)">Next ▶</button>
+  </div>
+</div>
+
 <div class="shark-selector-bar">
   <button class="shark-pill active" onclick="selectShark('megashark', this)">Megashark</button>
   <button class="shark-pill" onclick="selectShark('alexios', this)">Alexios</button>
@@ -268,6 +648,8 @@ Select any of the **18 satellite-tagged Whale Sharks** below (or click **Show Al
   <button class="shark-pill" onclick="selectShark('ambitious', this)">Ambitious</button>
   <button class="shark-pill" onclick="selectShark('all', this)">Show All 18</button>
 </div>
+
+<div id="shark-cards-stage" class="shark-cards-stage">
 
 <div id="shark-megashark" class="shark-subsection visible">
   <h3>Megashark (Tag ID: 252324)</h3>
@@ -537,6 +919,7 @@ Select any of the **18 satellite-tagged Whale Sharks** below (or click **Show Al
     <li><strong>Curve Pattern on Plot:</strong> Shortest tagged trajectory on the graph (9 uplinks across 6 days near Month 0).</li>
     <li><strong>Ecological Takeaway:</strong> Like <em>Dotti</em>, illustrates both localized reef feeding at 12.2°S and a real-world challenge of marine telemetry — tags can shed early or stop reporting once a shark dives into deep water.</li>
   </ul>
+</div>
 </div>
 ```
 

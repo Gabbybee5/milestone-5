@@ -106,6 +106,195 @@ main.content.page-columns {
 .leaflet-container {
   border-radius: 12px;
 }
+
+/* Styled Tabset for Switching Between Maps */
+.panel-tabset .nav-tabs {
+  border-bottom: 2px solid #cbd5e1;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+
+.panel-tabset .nav-tabs .nav-link {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #475569;
+  background: #e2e8f0;
+  border: 1px solid transparent;
+  border-radius: 10px 10px 0 0;
+  padding: 0.75rem 1.4rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.panel-tabset .nav-tabs .nav-link:hover {
+  color: #0f172a;
+  background: #cbd5e1;
+}
+
+.panel-tabset .nav-tabs .nav-link.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d3b66 0%, #0f766e 100%);
+  border-color: #0d3b66;
+}
+
+/* Interactive Whale Shark Map Controls */
+.ws-controls-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.15rem;
+}
+
+.ws-top-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ws-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ws-toggle-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  margin-right: 0.35rem;
+}
+
+.ws-btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.42rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ws-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.ws-btn.active {
+  background: linear-gradient(135deg, #0d3b66 0%, #0f766e 100%);
+  color: #ffffff;
+  border-color: #0d3b66;
+}
+
+.ws-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .ws-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ws-field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.35rem;
+}
+
+.ws-field select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.48rem 0.65rem;
+}
+
+.ws-slider-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+
+.ws-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ws-date-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f766e;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+}
+
+.ws-dual-slider {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .ws-dual-slider {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ws-range-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.ws-range-wrap input[type="range"] {
+  flex: 1;
+  accent-color: #0f766e;
+  cursor: pointer;
+}
+
+.ws-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+  color: #334155;
+}
 </style>
 
 <div class="hero-banner">
@@ -120,6 +309,8 @@ main.content.page-columns {
 ```{r}
 library(tidyverse)
 library(leaflet)
+library(jsonlite)
+library(htmltools)
 
 whale_shark_raw <- read_tsv("data/whale_shark/occurrence.txt", show_col_types = FALSE)
 
@@ -127,12 +318,33 @@ whale_shark_map <- whale_shark_raw |>
   mutate(
     id = as.character(id),
     date = as.Date(eventDate),
+    obs_year = year(date),
+    obs_month_num = month(date),
+    obs_month = as.character(month(date, label = TRUE, abbr = FALSE)),
     shark_name = str_remove(
       coalesce(occurrenceRemarks, "Coral Sea Sighting"),
       "^Animal name:\\s*"
     ),
     track_id = coalesce(as.character(organismID), "Unmarked"),
-    is_tagged = !is.na(organismID)
+    is_tagged = !is.na(organismID),
+    data_type = if_else(is_tagged, "satellite", "historical"),
+    data_type_label = if_else(
+      is_tagged,
+      "Satellite Tracking",
+      "Historical Sighting"
+    ),
+    shark_id_label = if_else(
+      is_tagged,
+      paste0(shark_name, " (ID: ", track_id, ")"),
+      "Unmarked (Historical Sighting)"
+    ),
+    location_region = case_when(
+      decimalLatitude > -11.0 ~ "Papua New Guinea & Torres Strait (<11°S)",
+      decimalLatitude > -15.0 ~ "Far Northern GBR & Osprey Reef (11°–15°S)",
+      decimalLatitude > -20.0 ~ "Central GBR & Coral Sea (15°–20°S)",
+      TRUE ~ "Southern GBR & Queensland (>20°S)"
+    ),
+    group_size = coalesce(organismQuantity, 1)
   ) |>
   filter(!is.na(date), !is.na(decimalLatitude), !is.na(decimalLongitude)) |>
   arrange(shark_name, eventDate, id) |>
@@ -144,11 +356,14 @@ whale_shark_map <- whale_shark_raw |>
   mutate(
     popup_html = paste0(
       "<b>Whale Shark (", shark_name, ")</b><br>",
-      "<i>Rhincodon typus</i><br>",
-      "<b>Date:</b> ", date, "<br>",
+      "<i>Rhincodon typus</i> &bull; <span style='color:#0f766e;font-weight:600;'>", data_type_label, "</span><br>",
+      "<b>Shark ID:</b> ", track_id, "<br>",
+      "<b>Date:</b> ", date, " (", obs_month, " ", obs_year, ")<br>",
+      "<b>Location:</b> ", location_region, "<br>",
+      "<b>Coordinates:</b> (", round(decimalLatitude, 3), "°, ", round(decimalLongitude, 3), "°)<br>",
       "<b>Sex / Life Stage:</b> ", coalesce(sex, "Unknown"), " / ", coalesce(lifeStage, "Unknown"), "<br>",
-      "<b>Spotting #:</b> ", spotting_num, " of ", total_spottings, "<br>",
-      "<b>Location:</b> (", round(decimalLatitude, 3), "°, ", round(decimalLongitude, 3), "°)"
+      "<b>Individuals Observed:</b> ", group_size, "<br>",
+      "<b>Record #:</b> ", spotting_num, " of ", total_spottings
     )
   )
 
@@ -228,7 +443,35 @@ shark_map <- shark_map |>
     lng2 = max(whale_shark_map$decimalLongitude) + 0.8,
     lat2 = max(whale_shark_map$decimalLatitude) + 0.8
   )
+
+ws_json_data <- whale_shark_map |>
+  arrange(date, id) |>
+  transmute(
+    lat = round(decimalLatitude, 5),
+    lng = round(decimalLongitude, 5),
+    date = as.character(date),
+    ts = as.numeric(date),
+    year = obs_year,
+    month_num = obs_month_num,
+    month = obs_month,
+    location = location_region,
+    shark_id = shark_id_label,
+    shark_name = shark_name,
+    type = data_type,
+    weight = pmin(group_size, 10),
+    popup = popup_html
+  )
+
+tags$script(
+  id = "ws-sightings-json",
+  type = "application/json",
+  HTML(toJSON(ws_json_data, auto_unbox = TRUE))
+)
 ```
+
+::: {.panel-tabset}
+
+## 1. Coral Sea Trajectory Overview
 
 <div class="map-card">
 <div class="map-card-header">
@@ -241,3 +484,380 @@ shark_map
   <strong>Spatial Pattern:</strong> <strong>2,391 GPS & sighting points</strong> stretch from southern Queensland (<code>27.9° S</code>) across the Great Barrier Reef and Coral Sea into Papua New Guinea waters (<code>6.3° S</code>). Use the layer checkboxes in the top-right corner of the map to toggle satellite tracks, tagged points, and opportunistic sightings, or click any point for individual shark details.
 </div>
 </div>
+
+## 2. Interactive Whale Shark Map
+
+```{=html}
+<div class="map-card">
+  <div class="map-card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+    <h2 class="map-card-title">Interactive Whale Shark Sightings & Concentration Explorer</h2>
+    <span id="ws-record-counter" class="ws-date-badge">Showing 2,391 of 2,391 records</span>
+  </div>
+
+  <div class="ws-controls-panel">
+    <div class="ws-top-toggles">
+      <div class="ws-toggle-group" id="ws-source-group">
+        <span class="ws-toggle-label">Data Source:</span>
+        <button type="button" class="ws-btn active" data-source="all">All Sightings & Tracks (2,391)</button>
+        <button type="button" class="ws-btn" data-source="historical">Historical Sightings (136)</button>
+        <button type="button" class="ws-btn" data-source="satellite">Satellite Tracking (2,255)</button>
+      </div>
+
+      <div class="ws-toggle-group" id="ws-view-group">
+        <span class="ws-toggle-label">Map Layer:</span>
+        <button type="button" class="ws-btn active" data-view="both">Markers + Heatmap</button>
+        <button type="button" class="ws-btn" data-view="markers">Markers Only</button>
+        <button type="button" class="ws-btn" data-view="heatmap">Concentration Heatmap</button>
+      </div>
+    </div>
+
+    <div class="ws-filter-grid">
+      <div class="ws-field">
+        <label for="ws-filter-year">Filter by Year</label>
+        <select id="ws-filter-year"><option value="all">All Years</option></select>
+      </div>
+      <div class="ws-field">
+        <label for="ws-filter-month">Filter by Month</label>
+        <select id="ws-filter-month"><option value="all">All Months</option></select>
+      </div>
+      <div class="ws-field">
+        <label for="ws-filter-location">Filter by Location</label>
+        <select id="ws-filter-location"><option value="all">All Coral Sea Locations</option></select>
+      </div>
+      <div class="ws-field">
+        <label for="ws-filter-shark">Filter by Individual Shark ID</label>
+        <select id="ws-filter-shark"><option value="all">All Sharks & Unmarked</option></select>
+      </div>
+    </div>
+
+    <div class="ws-slider-box">
+      <div class="ws-slider-header">
+        <span>Explore Sightings Over Time (Date Range Slider)</span>
+        <span id="ws-date-readout" class="ws-date-badge">2007-11-05 to 2024-12-31</span>
+      </div>
+      <div class="ws-dual-slider">
+        <div class="ws-range-wrap">
+          <span>Start:</span>
+          <input type="range" id="ws-date-start" min="0" max="100" value="0">
+        </div>
+        <div class="ws-range-wrap">
+          <span>End:</span>
+          <input type="range" id="ws-date-end" min="0" max="100" value="100">
+        </div>
+        <button type="button" class="ws-btn" id="ws-reset-btn">Reset Filters</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ws-interactive-map" style="width: 100%; height: 620px; border-radius: 12px; border: 1px solid #e2e8f0;"></div>
+
+  <div class="map-caption">
+    <strong>How to Explore:</strong> Click any marker to inspect sighting metadata (date, shark ID, sex/life stage, and coordinates). Switch between <strong>Historical Sightings</strong> (2007–2018 opportunistic encounters) and <strong>Satellite Tracking</strong> (2018–2024 tagged whale sharks), toggle the <strong>Concentration Heatmap</strong> to highlight aggregation hotspots such as Far Northern GBR &amp; Osprey Reef, or drag the <strong>Date Range Slider</strong> to watch spatial patterns shift over time.
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const rawEl = document.getElementById("ws-sightings-json");
+  if (!rawEl || typeof L === "undefined") return;
+  const allData = JSON.parse(rawEl.textContent);
+  if (!allData.length) return;
+
+  // Lightweight HTML5 Canvas Heatmap Layer for Leaflet
+  const CanvasHeatLayer = L.Layer.extend({
+    initialize: function (points) {
+      this._points = points || [];
+    },
+    setPoints: function (points) {
+      this._points = points || [];
+      this._redraw();
+    },
+    onAdd: function (map) {
+      this._map = map;
+      this._canvas = L.DomUtil.create("canvas", "leaflet-zoom-hide");
+      this._canvas.style.pointerEvents = "none";
+      this._canvas.style.position = "absolute";
+      map.getPanes().overlayPane.appendChild(this._canvas);
+      this._palette = this._buildPalette();
+      map.on("moveend zoomend resize", this._redraw, this);
+      this._redraw();
+    },
+    onRemove: function (map) {
+      if (this._canvas && this._canvas.parentNode) {
+        this._canvas.parentNode.removeChild(this._canvas);
+      }
+      map.off("moveend zoomend resize", this._redraw, this);
+    },
+    _buildPalette: function () {
+      const palCanvas = document.createElement("canvas");
+      palCanvas.width = 256;
+      palCanvas.height = 1;
+      const ctx = palCanvas.getContext("2d");
+      const grad = ctx.createLinearGradient(0, 0, 256, 0);
+      grad.addColorStop(0.15, "#38bdf8");
+      grad.addColorStop(0.4, "#2dd4bf");
+      grad.addColorStop(0.65, "#facc15");
+      grad.addColorStop(0.85, "#fb923c");
+      grad.addColorStop(1.0, "#ef4444");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 256, 1);
+      return ctx.getImageData(0, 0, 256, 1).data;
+    },
+    _redraw: function () {
+      if (!this._map || !this._canvas) return;
+      const size = this._map.getSize();
+      if (size.x <= 0 || size.y <= 0) return;
+
+      const topLeft = this._map.containerPointToLayerPoint([0, 0]);
+      L.DomUtil.setPosition(this._canvas, topLeft);
+      this._canvas.width = size.x;
+      this._canvas.height = size.y;
+
+      const ctx = this._canvas.getContext("2d");
+      ctx.clearRect(0, 0, size.x, size.y);
+      if (!this._points.length) return;
+
+      const radius = 24;
+      const stamp = document.createElement("canvas");
+      stamp.width = stamp.height = radius * 2;
+      const sCtx = stamp.getContext("2d");
+      const radGrad = sCtx.createRadialGradient(radius, radius, 2, radius, radius, radius);
+      radGrad.addColorStop(0, "rgba(0,0,0,1)");
+      radGrad.addColorStop(1, "rgba(0,0,0,0)");
+      sCtx.fillStyle = radGrad;
+      sCtx.fillRect(0, 0, radius * 2, radius * 2);
+
+      // Scale alpha dynamically so both 136 historical sightings and 2,391 total points show clear hotspots
+      const baseAlpha = this._points.length > 600 ? 0.08 : (this._points.length > 150 ? 0.16 : 0.28);
+
+      for (let i = 0; i < this._points.length; i++) {
+        const p = this._points[i];
+        const pt = this._map.latLngToContainerPoint([p.lat, p.lng]);
+        if (pt.x < -radius || pt.y < -radius || pt.x > size.x + radius || pt.y > size.y + radius) continue;
+        ctx.globalAlpha = Math.min(0.75, baseAlpha * (1 + Math.log1p(p.weight - 1) * 0.35));
+        ctx.drawImage(stamp, pt.x - radius, pt.y - radius);
+      }
+
+      const img = ctx.getImageData(0, 0, size.x, size.y);
+      const data = img.data;
+      const pal = this._palette;
+      for (let idx = 0; idx < data.length; idx += 4) {
+        const a = data[idx + 3];
+        if (a > 6) {
+          const pIdx = a * 4;
+          data[idx] = pal[pIdx];
+          data[idx + 1] = pal[pIdx + 1];
+          data[idx + 2] = pal[pIdx + 2];
+          data[idx + 3] = Math.min(215, Math.round(a * 0.88 + 25));
+        } else {
+          data[idx + 3] = 0;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+  });
+
+  // Initialize Leaflet map
+  const wsMap = L.map("ws-interactive-map", { preferCanvas: true });
+  const oceanTiles = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "Tiles &copy; Esri" }
+  ).addTo(wsMap);
+  const lightTiles = L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    { attribution: "&copy; OpenStreetMap &copy; CARTO" }
+  );
+  L.control.layers({ "Ocean Basemap": oceanTiles, "Clean Light Map": lightTiles }, null, { collapsed: true }).addTo(wsMap);
+
+  const lats = allData.map(d => d.lat);
+  const lngs = allData.map(d => d.lng);
+  const initialBounds = [
+    [Math.min(...lats) - 0.8, Math.min(...lngs) - 0.8],
+    [Math.max(...lats) + 0.8, Math.max(...lngs) + 0.8]
+  ];
+  wsMap.fitBounds(initialBounds);
+
+  const markerLayer = L.layerGroup().addTo(wsMap);
+  const heatLayer = new CanvasHeatLayer([]);
+  heatLayer.addTo(wsMap);
+
+  // Add compact legend
+  const legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    const div = L.DomUtil.create("div", "info legend");
+    div.style.background = "rgba(255,255,255,0.94)";
+    div.style.padding = "8px 11px";
+    div.style.borderRadius = "8px";
+    div.style.border = "1px solid #cbd5e1";
+    div.style.fontSize = "12px";
+    div.style.lineHeight = "1.5";
+    div.innerHTML =
+      "<b>Sighting Key</b><br>" +
+      "<span style='display:inline-block;width:10px;height:10px;border-radius:50%;background:#38bdf8;border:1.5px solid #0369a1;margin-right:6px;'></span>Historical Sighting<br>" +
+      "<span style='display:inline-block;width:10px;height:10px;border-radius:50%;background:#14b8a6;border:1.5px solid #0d5c56;margin-right:6px;'></span>Satellite Tracking<br>" +
+      "<span style='display:inline-block;width:54px;height:8px;border-radius:4px;background:linear-gradient(90deg,#38bdf8,#2dd4bf,#facc15,#ef4444);margin-right:6px;'></span>Density";
+    return div;
+  };
+  legend.addTo(wsMap);
+
+  // Populate Filter Dropdowns
+  const yearSel = document.getElementById("ws-filter-year");
+  const monthSel = document.getElementById("ws-filter-month");
+  const locSel = document.getElementById("ws-filter-location");
+  const sharkSel = document.getElementById("ws-filter-shark");
+
+  const years = [...new Set(allData.map(d => d.year))].sort((a, b) => a - b);
+  years.forEach(y => yearSel.add(new Option(y, String(y))));
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  monthNames.forEach((m, i) => {
+    if (allData.some(d => d.month_num === i + 1)) {
+      monthSel.add(new Option(m, String(i + 1)));
+    }
+  });
+
+  const locations = [...new Set(allData.map(d => d.location))].sort();
+  locations.forEach(loc => locSel.add(new Option(loc, loc)));
+
+  const sharks = [...new Set(allData.map(d => d.shark_id))].sort((a, b) => {
+    if (a.startsWith("Unmarked")) return -1;
+    if (b.startsWith("Unmarked")) return 1;
+    return a.localeCompare(b);
+  });
+  sharks.forEach(s => sharkSel.add(new Option(s, s)));
+
+  // Date slider setup using unique sorted dates
+  const uniqueDates = [...new Set(allData.map(d => d.date))].sort();
+  const startSlider = document.getElementById("ws-date-start");
+  const endSlider = document.getElementById("ws-date-end");
+  const dateReadout = document.getElementById("ws-date-readout");
+  const recordCounter = document.getElementById("ws-record-counter");
+
+  startSlider.max = uniqueDates.length - 1;
+  endSlider.max = uniqueDates.length - 1;
+  startSlider.value = 0;
+  endSlider.value = uniqueDates.length - 1;
+
+  let activeSource = "all";
+  let activeView = "both";
+
+  function updateMap() {
+    let sIdx = parseInt(startSlider.value, 10);
+    let eIdx = parseInt(endSlider.value, 10);
+    if (sIdx > eIdx) {
+      const tmp = sIdx;
+      sIdx = eIdx;
+      eIdx = tmp;
+    }
+    const minDate = uniqueDates[sIdx];
+    const maxDate = uniqueDates[eIdx];
+    dateReadout.textContent = minDate + " to " + maxDate;
+
+    const yVal = yearSel.value;
+    const mVal = monthSel.value;
+    const lVal = locSel.value;
+    const shVal = sharkSel.value;
+
+    const filtered = allData.filter(d => {
+      if (activeSource !== "all" && d.type !== activeSource) return false;
+      if (yVal !== "all" && String(d.year) !== yVal) return false;
+      if (mVal !== "all" && String(d.month_num) !== mVal) return false;
+      if (lVal !== "all" && d.location !== lVal) return false;
+      if (shVal !== "all" && d.shark_id !== shVal) return false;
+      if (d.date < minDate || d.date > maxDate) return false;
+      return true;
+    });
+
+    recordCounter.textContent =
+      "Showing " + filtered.length.toLocaleString() + " of " + allData.length.toLocaleString() + " records";
+
+    markerLayer.clearLayers();
+    if (activeView === "markers" || activeView === "both") {
+      filtered.forEach(d => {
+        const isSat = d.type === "satellite";
+        L.circleMarker([d.lat, d.lng], {
+          radius: isSat ? 4.5 : 6,
+          color: isSat ? "#0d5c56" : "#0369a1",
+          fillColor: isSat ? "#14b8a6" : "#38bdf8",
+          fillOpacity: activeView === "both" ? 0.78 : 0.88,
+          weight: isSat ? 1 : 1.5
+        })
+          .bindPopup(d.popup)
+          .addTo(markerLayer);
+      });
+    }
+
+    if (activeView === "heatmap" || activeView === "both") {
+      if (!wsMap.hasLayer(heatLayer)) wsMap.addLayer(heatLayer);
+      heatLayer.setPoints(filtered);
+    } else {
+      if (wsMap.hasLayer(heatLayer)) wsMap.removeLayer(heatLayer);
+    }
+  }
+
+  // Bind UI controls
+  document.querySelectorAll("#ws-source-group .ws-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#ws-source-group .ws-btn").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      activeSource = this.getAttribute("data-source");
+      updateMap();
+    });
+  });
+
+  document.querySelectorAll("#ws-view-group .ws-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#ws-view-group .ws-btn").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      activeView = this.getAttribute("data-view");
+      updateMap();
+    });
+  });
+
+  [yearSel, monthSel, locSel, sharkSel].forEach(sel => sel.addEventListener("change", updateMap));
+  startSlider.addEventListener("input", updateMap);
+  endSlider.addEventListener("input", updateMap);
+
+  document.getElementById("ws-reset-btn").addEventListener("click", function () {
+    yearSel.value = "all";
+    monthSel.value = "all";
+    locSel.value = "all";
+    sharkSel.value = "all";
+    startSlider.value = 0;
+    endSlider.value = uniqueDates.length - 1;
+    activeSource = "all";
+    document.querySelectorAll("#ws-source-group .ws-btn").forEach(b => {
+      b.classList.toggle("active", b.getAttribute("data-source") === "all");
+    });
+    wsMap.fitBounds(initialBounds);
+    updateMap();
+  });
+
+  // Ensure both Leaflet maps resize and fit bounds properly when switching tabs
+  let hasFittedOnReveal = false;
+  document.querySelectorAll('.panel-tabset .nav-link, a[data-bs-toggle="tab"], button[data-bs-toggle="tab"]').forEach(tabEl => {
+    const refreshMaps = function () {
+      setTimeout(function () {
+        window.dispatchEvent(new Event("resize"));
+        wsMap.invalidateSize();
+        const mapBox = document.getElementById("ws-interactive-map");
+        if (!hasFittedOnReveal && mapBox && mapBox.offsetWidth > 0) {
+          wsMap.fitBounds(initialBounds);
+          hasFittedOnReveal = true;
+        }
+        heatLayer._redraw();
+      }, 80);
+    };
+    tabEl.addEventListener("shown.bs.tab", refreshMaps);
+    tabEl.addEventListener("click", refreshMaps);
+  });
+
+  updateMap();
+});
+</script>
+```
+
+:::
