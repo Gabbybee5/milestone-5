@@ -1,6 +1,12 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - overview.qmd
+    - tracking-patterns.qmd
+    - meet-the-sharks.qmd
+    - ecology-conservation.qmd
+    - "*.qmd"
 
 website:
   title: "Whale Shark Tracking Explorer"
@@ -8,13 +14,13 @@ website:
     background: "#0a2540"
     foreground: "#ffffff"
     left:
-      - href: project.qmd
+      - href: overview.qmd
         text: "Overview"
       - href: tracking-patterns.qmd
         text: "Tracking Patterns"
-      - href: findings.qmd
+      - href: meet-the-sharks.qmd
         text: "Meet the Sharks"
-      - href: why-compare.qmd
+      - href: ecology-conservation.qmd
         text: "Ecology & Conservation"
 
 format:
