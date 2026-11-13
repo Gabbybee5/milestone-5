@@ -3,19 +3,19 @@ project:
   output-dir: _site
 
 website:
-  title: "Marine Tracking Explorer"
+  title: "Whale Shark Tracking Explorer"
   navbar:
     background: "#0a2540"
     foreground: "#ffffff"
     left:
       - href: project.qmd
-        text: "Interactive Graphic"
+        text: "Overview"
+      - href: tracking-patterns.qmd
+        text: "Tracking Patterns"
       - href: findings.qmd
         text: "What the Data Tells Us"
       - href: why-compare.qmd
-        text: "Why Compare?"
-      - href: about.qmd
-        text: "About the Data"
+        text: "Ecology & Conservation"
 
 format:
   html:

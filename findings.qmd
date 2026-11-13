@@ -103,154 +103,535 @@ main.content.page-columns {
   color: #0f172a;
   font-weight: 700;
 }
+
+.shark-selector-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1rem 0 1.25rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.shark-pill {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.38rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.shark-pill:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.shark-pill.active {
+  background: linear-gradient(135deg, #0d3b66 0%, #0f766e 100%);
+  color: #ffffff;
+  border-color: #0d3b66;
+}
+
+.shark-subsection {
+  display: none;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #0f766e;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.shark-subsection.visible {
+  display: block;
+}
+
+.shark-subsection h3 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.shark-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.meta-chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: 0.22rem 0.65rem;
+  border-radius: 6px;
+}
+
+.shark-subsection ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.shark-subsection li {
+  margin-bottom: 0.45rem;
+  line-height: 1.55;
+}
+
+.seasonal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.seasonal-grid .info-card {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+@media (max-width: 780px) {
+  .seasonal-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
+<script>
+function selectShark(sharkId, btnEl) {
+  document.querySelectorAll('.shark-pill').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  if (btnEl) btnEl.classList.add('active');
+
+  document.querySelectorAll('.shark-subsection').forEach(function(sec) {
+    if (sharkId === 'all' || sec.id === 'shark-' + sharkId) {
+      sec.classList.add('visible');
+    } else {
+      sec.classList.remove('visible');
+    }
+  });
+}
+</script>
 
 <div class="hero-banner">
   <div class="hero-eyebrow">Key Findings & Graph Breakdown</div>
-  <h1 class="hero-title">What the Data on the Graph Specifically Tells Us</h1>
+  <h1 class="hero-title">What the Whale Shark Data Specifically Tells Us</h1>
   <p class="hero-subtitle">
-    A detailed guide to the specific curves, plateaus, and seasonal jumps visible across the 3,635 observations on the interactive plot.
+    An overview of the Coral Sea dataset, ecological patterns, and the specific trajectories, deep-water plateaus, and seasonal surges across all 2,391 Whale Shark observations.
   </p>
 </div>
 ```
 
 <div class="info-card">
 
-## 1. What the Light Blue Curve Tells Us (Beluga Whales in the Beaufort Sea)
+## Overview of the Dataset
 
-The light blue curve tracks **1,244 acoustic detections** of Beluga Whales (*Delphinapterus leucas*) at the `Aural_M2` hydrophone mooring between **September 30, 2010 and August 27, 2011 (331 days)**. Looking closely at its shape on the graph reveals three distinct seasonal phases:
+This project analyzes **2,391 observations** of **Whale Sharks (*Rhincodon typus*)** in Australia's Coral Sea collected by the Biopixel Oceans Foundation and James Cook University:
 
-- **Phase 1 — Autumn Migration Burst (Days 0 to 55 | Sept–Nov 2010):**  
-  The curve climbs rapidly from 1 to **316 detections** (6 in late September, 171 in October, and 139 in November). This steep initial slope captures Beluga pods vocalizing heavily as they migrate out of the Beaufort Sea ahead of advancing winter sea ice.
-- **Phase 2 — The 4-Month Winter Sea-Ice Gap (Days 55 to 195 | Dec 2010–March 2011):**  
-  Between late November 2010 and early April 2011, there are **zero detections** for roughly **140 consecutive days**. On the graph, this appears as an empty horizontal jump at a height of 316 detections — direct visual proof that heavy winter pack ice completely excluded Belugas from this part of the western Beaufort Sea.
-- **Phase 3 — Spring Lead Opening & Summer Peak (Days 195 to 331 | April–Aug 2011):**  
-  As cracks (leads) open in the ice during spring, detections resume abruptly in **April (132)** and **May (206)**, pause briefly in **June (26)**, and then surge nearly vertically in **July (304)** and **August (260)** up to the final count of **1,244 detections**.
+1. **Satellite-Tagged Whale Sharks (2,255 transmissions):** High-resolution satellite tracking records from **18 individually named whale sharks** (including *Megashark*, *Alexios*, *Ali*, *Sharpie*, *Juanita*, and *GBR1*) tagged primarily along the northern Great Barrier Reef and Coral Sea reefs.
+2. **Opportunistic Coral Sea Sightings (136 sightings):** Visual and vessel-based sighting records spanning nearly **11 years (November 2007 to October 2018)**, providing a long-term baseline of whale shark presence across the region.
 
 </div>
 
 <div class="info-card">
 
-## 2. What the Dark Teal Curves Tell Us (Coral Sea Whale Sharks)
+## Ecological Patterns in the Plot — By Named Whale Shark
 
-Unlike the single mooring curve for Belugas, the **2,391 dark teal points** split into **19 distinct trajectories** (18 individually named satellite-tagged whale sharks plus 1 long line of opportunistic sightings). Their shapes on the graph reveal three behavioral patterns:
+Select any of the **18 satellite-tagged Whale Sharks** below (or click **Show All 18**) to inspect its biological profile, distance traveled, and what its specific curve on the scatter plot reveals:
 
-- **High-Frequency Austral Summer Tracks (Days 0 to 160):**  
-  Most sharks were tagged during late November and early December coral spawning aggregations in the Coral Sea. Their curves shoot steeply upward from Day 0 because the sharks spend substantial time feeding near the surface, allowing their tags to transmit multiple times per day:
-  - **Alexios:** Climbs to **357 locations in just 158 days** (~2.3 transmissions/day).
-  - **Sharpie:** Reaches **261 locations in 97 days** (~2.7 transmissions/day).
-  - **Juanita & GBR1:** Reach **204 locations (132 days)** and **177 locations (146 days)** respectively.
-- **Year-Long & Multi-Year "Step-and-Plateau" Tracks (Days 160 to 770):**  
-  Three sharks extend far to the right on the graph with alternating flat gaps and steep upward steps:
-  - **Megashark (423 detections over 397 days):** The tallest whale shark curve on the graph. After an initial burst, its curve flattens across mid-year (when the shark dives deeper or moves offshore with fewer satellite uplinks) and then climbs steeply again past Day 300.
-  - **Ali (273 detections over 770 days / 2.1 years)** and **Blancpain (73 detections over 526 days / 1.4 years):** Show that individual whale sharks survive with active tags across multiple years, re-emerging in surface waters in seasonal cycles.
-- **Decade-Long Baseline Presence (Days 0 to 4,006):**  
-  The longest, flattest dark teal line stretching all the way to **4,006 days (~11 years, 2007–2018)** represents **136 opportunistic Coral Sea sightings**, demonstrating consistent multi-year presence in the region even before high-density satellite tagging began.
+```{=html}
+<div class="shark-selector-bar">
+  <button class="shark-pill active" onclick="selectShark('megashark', this)">Megashark</button>
+  <button class="shark-pill" onclick="selectShark('alexios', this)">Alexios</button>
+  <button class="shark-pill" onclick="selectShark('ali', this)">Ali</button>
+  <button class="shark-pill" onclick="selectShark('sharpie', this)">Sharpie</button>
+  <button class="shark-pill" onclick="selectShark('juanita', this)">Juanita</button>
+  <button class="shark-pill" onclick="selectShark('gbr1', this)">GBR1</button>
+  <button class="shark-pill" onclick="selectShark('beizam', this)">Beizam</button>
+  <button class="shark-pill" onclick="selectShark('blancpain', this)">Blancpain</button>
+  <button class="shark-pill" onclick="selectShark('gbr2', this)">GBR2</button>
+  <button class="shark-pill" onclick="selectShark('infamis', this)">Infamis</button>
+  <button class="shark-pill" onclick="selectShark('jaap', this)">Jaap</button>
+  <button class="shark-pill" onclick="selectShark('halliday', this)">Halliday</button>
+  <button class="shark-pill" onclick="selectShark('hugh', this)">Hugh</button>
+  <button class="shark-pill" onclick="selectShark('fifty_fathoms', this)">Fifty_Fathoms</button>
+  <button class="shark-pill" onclick="selectShark('sapphire', this)">Sapphire</button>
+  <button class="shark-pill" onclick="selectShark('andrew', this)">Andrew</button>
+  <button class="shark-pill" onclick="selectShark('dotti', this)">Dotti</button>
+  <button class="shark-pill" onclick="selectShark('ambitious', this)">Ambitious</button>
+  <button class="shark-pill" onclick="selectShark('all', this)">Show All 18</button>
+</div>
+
+<div id="shark-megashark" class="shark-subsection visible">
+  <h3>Megashark (Tag ID: 252324)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">423 Transmissions</span>
+    <span class="meta-chip">Span: 13.0 Months (2023-11-30 to 2024-12-31)</span>
+    <span class="meta-chip">Min. Distance: ~6,073 km</span>
+    <span class="meta-chip">Latitudes: 16.5°S to 9.7°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Forms the tallest trajectory on the scatter plot (reaching 423 cumulative detections). After climbing steeply over its first few summer months, it flattens across a 49-day mid-year gap before surging strongly again between Months 10 and 13.</li>
+    <li><strong>Ecological Takeaway:</strong> Shows classic seasonal cycling — frequent surface foraging during back-to-back austral summers separated by deeper offshore winter roaming across more than 6,000 km of the Coral Sea.</li>
+  </ul>
+</div>
+
+<div id="shark-alexios" class="shark-subsection">
+  <h3>Alexios (Tag ID: 178953)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">357 Transmissions</span>
+    <span class="meta-chip">Span: 5.2 Months (2021-12-05 to 2022-05-12)</span>
+    <span class="meta-chip">Min. Distance: ~4,307 km</span>
+    <span class="meta-chip">Latitudes: 18.1°S to 11.1°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Rises rapidly and smoothly to 357 detections in just over 5 months (~2.3 transmissions/day) with no silent gap longer than 13 days.</li>
+    <li><strong>Ecological Takeaway:</strong> Indicates sustained surface and upper-water-column activity as this immature male traveled over 4,300 km along the outer Great Barrier Reef and Coral Sea basin from summer into autumn.</li>
+  </ul>
+</div>
+
+<div id="shark-ali" class="shark-subsection">
+  <h3>Ali (Tag ID: 178954)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Female · Immature</span>
+    <span class="meta-chip">273 Transmissions</span>
+    <span class="meta-chip">Span: 25.3 Months (2021-12-06 to 2024-01-15)</span>
+    <span class="meta-chip">Min. Distance: ~11,378 km</span>
+    <span class="meta-chip">Latitudes: 18.6°S to 7.9°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Stretches farthest right among all tagged sharks (25.3 months / >2 years), advancing in staircase-like seasonal bursts separated by gaps of up to 73 days.</li>
+    <li><strong>Ecological Takeaway:</strong> One of only two confirmed females in the tagged cohort and the dataset's long-distance marathoner, logging over 11,300 km between central Queensland latitudes and waters near Papua New Guinea.</li>
+  </ul>
+</div>
+
+<div id="shark-sharpie" class="shark-subsection">
+  <h3>Sharpie (Tag ID: 252325)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">261 Transmissions</span>
+    <span class="meta-chip">Span: 3.2 Months (2023-12-01 to 2024-03-07)</span>
+    <span class="meta-chip">Min. Distance: ~1,544 km</span>
+    <span class="meta-chip">Latitudes: 13.5°S to 11.3°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> One of the steepest initial slopes on the chart, packing 261 locations into 97 days (~2.7 uplinks/day) with a maximum gap of only 10 days.</li>
+    <li><strong>Ecological Takeaway:</strong> Stayed within a relatively tight northern reef band (11.3°S–13.5°S), spending long periods basking and filter-feeding at the surface during peak summer plankton productivity.</li>
+  </ul>
+</div>
+
+<div id="shark-juanita" class="shark-subsection">
+  <h3>Juanita (Tag ID: 172900)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Unknown Sex · Immature</span>
+    <span class="meta-chip">204 Transmissions</span>
+    <span class="meta-chip">Span: 4.3 Months (2023-11-03 to 2024-03-14)</span>
+    <span class="meta-chip">Min. Distance: ~2,642 km</span>
+    <span class="meta-chip">Latitudes: 16.6°S to 8.1°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Climbs steadily from Month 0 to 204 detections across 4.3 months, punctuated by brief 1–3 week pauses (max gap 21 days).</li>
+    <li><strong>Ecological Takeaway:</strong> Tracked earlier in spring (early November) than most sharks and ranged widely across 8.5 degrees of latitude northward into the northern Coral Sea.</li>
+  </ul>
+</div>
+
+<div id="shark-gbr1" class="shark-subsection">
+  <h3>GBR1 (Tag ID: 172899)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Unknown Sex · Immature</span>
+    <span class="meta-chip">177 Transmissions</span>
+    <span class="meta-chip">Span: 4.8 Months (2018-10-26 to 2019-03-21)</span>
+    <span class="meta-chip">Min. Distance: ~3,677 km</span>
+    <span class="meta-chip">Latitudes: 14.2°S to 6.3°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Exceptionally smooth, unbroken upward line over nearly 5 months — never going more than 4 days without a satellite uplink.</li>
+    <li><strong>Ecological Takeaway:</strong> Reached the northernmost latitude of any shark in the dataset (6.3°S in Papua New Guinea waters), proving cross-border movement across the northern Coral Sea.</li>
+  </ul>
+</div>
+
+<div id="shark-beizam" class="shark-subsection">
+  <h3>Beizam (Tag ID: 243952)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Subadult</span>
+    <span class="meta-chip">98 Transmissions</span>
+    <span class="meta-chip">Span: 2.2 Months (2023-12-02 to 2024-02-08)</span>
+    <span class="meta-chip">Min. Distance: ~1,846 km</span>
+    <span class="meta-chip">Latitudes: 17.2°S to 11.3°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Steady 2.2-month climb to 98 detections across December–February with minimal transmission gaps.</li>
+    <li><strong>Ecological Takeaway:</strong> Notable as the <strong>only Subadult</strong> shark in an otherwise immature-dominated tagged group, cruising rapidly southward and offshore (~27 km/day) across nearly 6 degrees of latitude.</li>
+  </ul>
+</div>
+
+<div id="shark-blancpain" class="shark-subsection">
+  <h3>Blancpain (Tag ID: 178957)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Female · Immature</span>
+    <span class="meta-chip">73 Transmissions</span>
+    <span class="meta-chip">Span: 17.3 Months (2021-12-06 to 2023-05-16)</span>
+    <span class="meta-chip">Min. Distance: ~1,943 km</span>
+    <span class="meta-chip">Latitudes: 14.5°S to 8.1°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Features the most dramatic horizontal plateau on the entire plot — going silent for <strong>276 consecutive days (~9 months)</strong> before resuming transmissions past Month 15.</li>
+    <li><strong>Ecological Takeaway:</strong> Along with <em>Ali</em>, one of only two tagged females; demonstrates how whale sharks can spend months foraging in deep or remote waters without long surface intervals before reappearing the next season.</li>
+  </ul>
+</div>
+
+<div id="shark-gbr2" class="shark-subsection">
+  <h3>GBR2 (Tag ID: 176413)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">69 Transmissions</span>
+    <span class="meta-chip">Span: 2.9 Months (2019-11-17 to 2020-02-13)</span>
+    <span class="meta-chip">Min. Distance: ~2,675 km</span>
+    <span class="meta-chip">Latitudes: 15.1°S to 10.8°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Moderate 3-month summer curve reaching 69 uplinks with occasional 1–2 week diving gaps.</li>
+    <li><strong>Ecological Takeaway:</strong> Covered high daily mileage (~30 km/day average between pings), moving briskly across outer Coral Sea reefs during the 2019–2020 summer season.</li>
+  </ul>
+</div>
+
+<div id="shark-infamis" class="shark-subsection">
+  <h3>Infamis (Tag ID: 243954)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">66 Transmissions</span>
+    <span class="meta-chip">Span: 2.4 Months (2023-12-01 to 2024-02-12)</span>
+    <span class="meta-chip">Min. Distance: ~644 km</span>
+    <span class="meta-chip">Latitudes: 13.8°S to 12.2°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Compact 2.4-month summer trajectory rising to 66 detections near the base of the main summer cluster.</li>
+    <li><strong>Ecological Takeaway:</strong> Showed strong site fidelity within a narrow 1.6° latitude band along the northern Great Barrier Reef shelf edge rather than making an immediate long-distance crossing.</li>
+  </ul>
+</div>
+
+<div id="shark-jaap" class="shark-subsection">
+  <h3>Jaap (Tag ID: 178948)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">63 Transmissions</span>
+    <span class="meta-chip">Span: 1.3 Months (2019-11-19 to 2019-12-28)</span>
+    <span class="meta-chip">Min. Distance: ~255 km</span>
+    <span class="meta-chip">Latitudes: 12.2°S to 11.6°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Steep short-duration curve reaching 63 locations within 39 days (~1.6 uplinks/day).</li>
+    <li><strong>Ecological Takeaway:</strong> Remained tightly localized around the Wreck Bay / northern reef aggregation hotspot during late November and December coral spawning.</li>
+  </ul>
+</div>
+
+<div id="shark-halliday" class="shark-subsection">
+  <h3>Halliday (Tag ID: 243955)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">53 Transmissions</span>
+    <span class="meta-chip">Span: 1.3 Months (2023-12-04 to 2024-01-12)</span>
+    <span class="meta-chip">Min. Distance: ~772 km</span>
+    <span class="meta-chip">Latitudes: 15.0°S to 11.3°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Climbs cleanly to 53 detections over 39 days across December and early January.</li>
+    <li><strong>Ecological Takeaway:</strong> Unlike <em>Jaap</em> over the same 39-day span, <em>Halliday</em> traveled more than three times farther (~772 km), heading southward along the outer reef margin.</li>
+  </ul>
+</div>
+
+<div id="shark-hugh" class="shark-subsection">
+  <h3>Hugh (Tag ID: 243951)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">53 Transmissions</span>
+    <span class="meta-chip">Span: 0.2 Months / 7 Days (2023-11-30 to 2023-12-07)</span>
+    <span class="meta-chip">Min. Distance: ~143 km</span>
+    <span class="meta-chip">Latitudes: 12.2°S to 12.0°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Appears nearly vertical near Month 0, recording 53 high-frequency transmissions in just one week (~7.6 uplinks/day!).</li>
+    <li><strong>Ecological Takeaway:</strong> Captures intense, continuous surface feeding right after tagging before the tag ceased reporting or detached.</li>
+  </ul>
+</div>
+
+<div id="shark-fifty_fathoms" class="shark-subsection">
+  <h3>Fifty_Fathoms (Tag ID: 178951)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">24 Transmissions</span>
+    <span class="meta-chip">Span: 1.2 Months (2021-12-05 to 2022-01-11)</span>
+    <span class="meta-chip">Min. Distance: ~868 km</span>
+    <span class="meta-chip">Latitudes: 14.6°S to 11.5°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Low, gentle 1.2-month curve reaching 24 transmissions over 37 days.</li>
+    <li><strong>Ecological Takeaway:</strong> Despite fewer surface uplinks, covered nearly 870 km across 3 degrees of latitude — suggesting deeper travel with briefer surface intervals.</li>
+  </ul>
+</div>
+
+<div id="shark-sapphire" class="shark-subsection">
+  <h3>Sapphire (Tag ID: 176409)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">24 Transmissions</span>
+    <span class="meta-chip">Span: 0.3 Months / 9 Days (2024-03-05 to 2024-03-14)</span>
+    <span class="meta-chip">Min. Distance: ~1,387 km</span>
+    <span class="meta-chip">Latitudes: 16.5°S to 12.7°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Short 9-day burst of 24 detections near the origin of the X-axis.</li>
+    <li><strong>Ecological Takeaway:</strong> Tracked in March (late summer/early autumn) rather than December, moving rapidly across wide Coral Sea distances in just over a week.</li>
+  </ul>
+</div>
+
+<div id="shark-andrew" class="shark-subsection">
+  <h3>Andrew (Tag ID: 243953)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">18 Transmissions</span>
+    <span class="meta-chip">Span: 0.2 Months / 5 Days (2023-12-01 to 2023-12-06)</span>
+    <span class="meta-chip">Min. Distance: ~76 km</span>
+    <span class="meta-chip">Latitudes: 12.2°S to 11.9°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Brief 5-day cluster of 18 transmissions right at Month 0.</li>
+    <li><strong>Ecological Takeaway:</strong> Represents short-term local foraging around the northern reef tagging site in early December before early tag loss or deep offshore departure.</li>
+  </ul>
+</div>
+
+<div id="shark-dotti" class="shark-subsection">
+  <h3>Dotti (Tag ID: 178949)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Male · Immature</span>
+    <span class="meta-chip">10 Transmissions</span>
+    <span class="meta-chip">Span: 0.1 Months / 3 Days (2019-11-20 to 2019-11-23)</span>
+    <span class="meta-chip">Min. Distance: ~20 km</span>
+    <span class="meta-chip">Latitudes: 12.2°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Compact 10-point cluster at the bottom-left origin of the plot.</li>
+    <li><strong>Ecological Takeaway:</strong> Captures a 3-day snapshot of localized reef aggregation behavior at 12.2°S during the November 2019 tagging expedition.</li>
+  </ul>
+</div>
+
+<div id="shark-ambitious" class="shark-subsection">
+  <h3>Ambitious (Tag ID: 176407)</h3>
+  <div class="shark-meta">
+    <span class="meta-chip">Unknown Sex · Immature</span>
+    <span class="meta-chip">9 Transmissions</span>
+    <span class="meta-chip">Span: 0.2 Months / 6 Days (2019-11-19 to 2019-11-25)</span>
+    <span class="meta-chip">Min. Distance: ~19 km</span>
+    <span class="meta-chip">Latitudes: 12.2°S to 12.1°S</span>
+  </div>
+  <ul>
+    <li><strong>Curve Pattern on Plot:</strong> Shortest tagged trajectory on the graph (9 uplinks across 6 days near Month 0).</li>
+    <li><strong>Ecological Takeaway:</strong> Like <em>Dotti</em>, illustrates both localized reef feeding at 12.2°S and a real-world challenge of marine telemetry — tags can shed early or stop reporting once a shark dives into deep water.</li>
+  </ul>
+</div>
+```
+
+</div>
+
+<div class="seasonal-grid">
+
+<div class="info-card">
+
+## Peak Austral Summer Window (November–February)
+
+Looking at the monthly bar chart on the **Overview** tab highlights a strong warm-season surge in the Coral Sea: transmissions climb dramatically starting in late spring and summer as whale sharks aggregate along outer reef shelf edges to feed near the surface on dense plankton blooms and coral/fish spawning events.
 
 </div>
 
 <div class="info-card">
 
-## 3. Direct Comparison: What the Data Tells Us About the Whales vs. the Sharks
+## Mid-Year Offshore Dispersal (May–September)
 
-When we look at the light blue Beluga Whale curve and the dark teal Whale Shark curves together on the same axes, the data reveals three direct comparisons:
+Detection counts drop during the austral winter not because whale sharks vanish from the Pacific, but because individuals disperse widely across deep open-ocean basins and spend longer intervals foraging at depth where fin-mounted satellite tags cannot transmit through seawater.
 
-- **Detection Volume in the 0–331 Day Overlap Window (Pod Bottleneck vs. Solitary Individuals):**  
-  Over the first **331 days**, the Beluga Whale curve climbs to **1,244 cumulative detections** — nearly **3 times higher** on the Y-axis than the single most-detected Whale Shark (*Megashark*, with **423 detections** over 397 days). This shows that a single stationary hydrophone placed in an Arctic migration corridor detects passing groups of vocalizing whales at a much higher cumulative volume than a satellite tag tracking a solitary shark that only transmits when its fin breaks the ocean surface.
-- **Why the Curves Flatten (Arctic Sea-Ice Lockout vs. Deep-Water Foraging):**  
-  Both species exhibit flat horizontal plateaus on the graph where zero new detections are recorded for weeks or months, but the data points to opposite causes:
-  - The **Beluga Whale plateau (Days 55–195)** happens during the freezing Arctic winter (December–March) when solid pack ice forces the entire population out of the Western Beaufort Sea.
-  - The **Whale Shark plateaus** (seen mid-track in *Megashark*, *Ali*, and *Blancpain*) occur in warm tropical waters when individual sharks spend extended periods swimming at depth or far offshore without surfacing long enough to lock onto a satellite.
-- **Short-Term Seasonal Intensity vs. Multi-Year Persistence (X-Axis Span):**  
-  On the X-axis, the Beluga data is concentrated entirely within a single **1-year seasonal cycle (331 days)**, whereas the Whale Shark data stretches across **2+ years for tagged individuals (*Ali* at 770 days)** and **11 years for Coral Sea sightings (4,006 days)** — showing how acoustic moorings excel at capturing high-density seasonal migrations while satellite telemetry and visual surveys capture multi-year individual roaming.
+</div>
 
 </div>
 
 <div class="info-card">
 
-## 4. FAQ: Why Can We Compare One Beluga Line (`Aural_M2`) Against 19 Whale Shark Tracks?
-
-A natural question when viewing the graph is: *Why is there only one light blue Beluga Whale line (`Aural_M2`) while there are 19 separate dark teal Whale Shark lines — and can we still compare them fairly?* **Yes, for three key reasons:**
-
-- **One Hydrophone Captures Entire Migrating Pods (Not Just One Animal):**  
-  Whale sharks are tracked using physical satellite tags attached to individual fins (so each shark gets its own named ID like *Megashark* or *Alexios*). In contrast, Beluga Whales in the icy Beaufort Sea are monitored using a stationary underwater acoustic recorder (`Aural_M2`). Rather than tracking just one whale, that single `Aural_M2` line represents **1,244 separate acoustic detection events** recorded as numerous Beluga pods swam and vocalized past the mooring over a full year.
-- **Over 1,200 Data Points Provide Strong Statistical Weight:**  
-  Even though the Beluga data is grouped under one mooring ID, its **1,244 observations** make up more than a third of the entire 3,635-point dataset — and contain nearly **three times as many data points** as the longest-tracked individual Whale Shark (*Megashark*, with 423 points).
-- **Normalized "Days Since First Detection" Puts Both Methods on Equal Footing:**  
-  By aligning every track to start at **Day 0 (Days Elapsed Since First Sighting)**, the graph measures *how quickly and in what seasonal rhythm detections accumulate over time*. That allows us to directly compare the seasonal pulse of an Arctic whale population against the individual movement rhythms of tropical whale sharks.
-
-</div>
-
-<div class="info-card">
-
-## 5. Summary Table of Key Trajectories on the Graph
+## Summary Table of Key Whale Shark Trajectories
 
 <table class="data-table">
   <thead>
     <tr>
-      <th>Organism / Track Name</th>
-      <th>Group</th>
+      <th>Whale Shark / Record</th>
+      <th>Observation Type</th>
       <th>First Recorded</th>
       <th>Last Recorded</th>
-      <th>Span (Days)</th>
-      <th>Total Detections</th>
+      <th>Span (Months)</th>
+      <th>Total Records</th>
       <th>Pattern on Graph</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Beluga Whale (Aural_M2)</strong></td>
-      <td>Beaufort Sea (Light Blue)</td>
-      <td>2010-09-30</td>
-      <td>2011-08-27</td>
-      <td>331 days</td>
-      <td><strong>1,244</strong></td>
-      <td>Two steep seasonal surges separated by a 140-day winter ice gap</td>
-    </tr>
-    <tr>
       <td><strong>Whale Shark (Megashark)</strong></td>
-      <td>Coral Sea (Dark Teal)</td>
+      <td>Satellite Tag</td>
       <td>2023-11-30</td>
       <td>2024-12-31</td>
-      <td>397 days</td>
+      <td>13.0 months</td>
       <td><strong>423</strong></td>
-      <td>Highest individual shark curve; strong late-year resurgence</td>
+      <td>Highest individual curve; mid-year plateau followed by late-year surge</td>
     </tr>
     <tr>
       <td><strong>Whale Shark (Alexios)</strong></td>
-      <td>Coral Sea (Dark Teal)</td>
+      <td>Satellite Tag</td>
       <td>2021-12-05</td>
       <td>2022-05-12</td>
-      <td>158 days</td>
+      <td>5.2 months</td>
       <td><strong>357</strong></td>
-      <td>Rapid, steady climb across 5 months</td>
+      <td>Rapid, steady surface-tracking climb across 5 months</td>
     </tr>
     <tr>
       <td><strong>Whale Shark (Ali)</strong></td>
-      <td>Coral Sea (Dark Teal)</td>
+      <td>Satellite Tag</td>
       <td>2021-12-06</td>
       <td>2024-01-15</td>
-      <td>770 days</td>
+      <td>25.3 months</td>
       <td><strong>273</strong></td>
-      <td>Longest tagged shark span (>2 years) with multi-season steps</td>
+      <td>Longest tagged shark span (&gt;2 years) with multi-season steps</td>
     </tr>
     <tr>
       <td><strong>Whale Shark (Sharpie)</strong></td>
-      <td>Coral Sea (Dark Teal)</td>
+      <td>Satellite Tag</td>
       <td>2023-12-01</td>
       <td>2024-03-07</td>
-      <td>97 days</td>
+      <td>3.2 months</td>
       <td><strong>261</strong></td>
-      <td>Very steep 3-month surface tracking burst</td>
+      <td>Very steep 3-month summer surface burst</td>
+    </tr>
+    <tr>
+      <td><strong>Whale Shark (Juanita)</strong></td>
+      <td>Satellite Tag</td>
+      <td>2023-11-03</td>
+      <td>2024-03-14</td>
+      <td>4.3 months</td>
+      <td><strong>204</strong></td>
+      <td>Consistent summer reef foraging trajectory</td>
     </tr>
     <tr>
       <td><strong>Whale Shark (Coral Sea Sighting)</strong></td>
-      <td>Coral Sea (Dark Teal)</td>
+      <td>Opportunistic Sightings</td>
       <td>2007-11-05</td>
       <td>2018-10-24</td>
-      <td>4,006 days</td>
+      <td>131.6 months</td>
       <td><strong>136</strong></td>
-      <td>Long gradual line spanning nearly 11 years across the X-axis</td>
+      <td>Long baseline spanning nearly 11 years across the X-axis</td>
     </tr>
   </tbody>
 </table>

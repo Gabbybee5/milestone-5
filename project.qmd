@@ -191,10 +191,9 @@ library(plotly)
 library(crosstalk)
 
 whale_shark_raw <- read_tsv("data/whale_shark/occurrence.txt", show_col_types = FALSE)
-beluga_raw <- read_tsv("data/beluga/occurrence.txt", show_col_types = FALSE)
 
 # Prepare all 2,391 Whale Shark tracking & sighting points (Coral Sea)
-whale_shark_points <- whale_shark_raw |>
+all_occurrences <- whale_shark_raw |>
   mutate(
     id = as.character(id),
     date = as.Date(eventDate),
@@ -203,6 +202,7 @@ whale_shark_points <- whale_shark_raw |>
       "^Animal name:\\s*"
     ),
     track_id = coalesce(as.character(organismID), "Unmarked"),
+    is_tagged = !is.na(organismID),
     common_name = paste0("Whale Shark (", shark_name, ")")
   ) |>
   filter(!is.na(date), !is.na(scientificName)) |>
@@ -219,58 +219,18 @@ whale_shark_points <- whale_shark_raw |>
     .by = c(scientificName, track_id, shark_name)
   ) |>
   mutate(
-    group = "Whale Shark Trackings (Coral Sea)",
-    label = paste0(common_name, " — ID: ", track_id, " (", scientificName, ")")
-  )
-
-# Prepare Beluga Whale acoustic detection points (Western Beaufort Sea)
-beluga_points <- beluga_raw |>
-  filter(scientificName == "Delphinapterus leucas") |>
-  mutate(
-    id = as.character(id),
-    date = as.Date(eventDate),
-    track_id = coalesce(as.character(organismID), "Beaufort_Mooring"),
-    common_name = paste0("Beluga Whale (", track_id, ")")
-  ) |>
-  filter(!is.na(date), !is.na(scientificName)) |>
-  arrange(track_id, eventDate, id) |>
-  mutate(
-    first_seen = min(date),
-    last_seen = max(date),
-    total_span_days = as.numeric(last_seen - first_seen),
-    days_elapsed = as.numeric(date - first_seen),
-    total_span_months = round(total_span_days / 30.44, 1),
-    months_elapsed = round(days_elapsed / 30.44, 2),
-    spotting_num = row_number(),
-    total_spottings = n(),
-    .by = c(scientificName, track_id)
-  ) |>
-  mutate(
-    group = "Beluga Whale Detections (Beaufort Sea)",
-    label = paste0(common_name, " (", scientificName, ")")
-  )
-
-all_occurrences <- bind_rows(
-  whale_shark_points |>
-    select(
-      id, common_name, scientificName, label, group, date, first_seen, last_seen,
-      days_elapsed, total_span_days, months_elapsed, total_span_months,
-      spotting_num, total_spottings, decimalLatitude, decimalLongitude
+    group = if_else(
+      is_tagged,
+      "Satellite-Tagged Whale Sharks (18 Individuals)",
+      "Opportunistic Sightings (Coral Sea)"
     ),
-  beluga_points |>
-    select(
-      id, common_name, scientificName, label, group, date, first_seen, last_seen,
-      days_elapsed, total_span_days, months_elapsed, total_span_months,
-      spotting_num, total_spottings, decimalLatitude, decimalLongitude
-    )
-) |>
-  mutate(
+    label = paste0(common_name, " — ID: ", track_id, " (", scientificName, ")"),
     obs_month = month(date, label = TRUE, abbr = TRUE),
     hover_text = paste0(
-      "<b>Common Name: ", common_name, "</b><br>",
+      "<b>", common_name, "</b><br>",
       "Scientific Name: <i>", scientificName, "</i><br>",
-      "Organism / ID: ", label, "<br>",
-      "Group: ", group, "<br>",
+      "Tracking Record: ", label, "<br>",
+      "Observation Type: ", group, "<br>",
       "Event Date: ", date, " (", obs_month, ")<br>",
       "Spotting / Tracking #: ", spotting_num, " of ", total_spottings, "<br>",
       "Months Elapsed: ", round(months_elapsed, 1), " months (Total Span: ", total_span_months, " months)<br>",
@@ -282,10 +242,10 @@ shared_occurrences <- SharedData$new(all_occurrences)
 ```
 
 <div class="hero-banner">
-  <div class="hero-eyebrow">Ocean Telemetry & Acoustic Monitoring</div>
-  <h1 class="hero-title">Whale Shark vs. Beluga Whale: Spottings & Observation Spans</h1>
+  <div class="hero-eyebrow">Coral Sea Satellite Telemetry & Sightings</div>
+  <h1 class="hero-title">Coral Sea Whale Sharks: Spottings & Observation Spans</h1>
   <p class="hero-subtitle">
-    Explore how satellite-tracked <strong>Whale Sharks</strong> in Australia's Coral Sea compare with moored acoustic detections of <strong>Beluga Whales</strong> in the Arctic's Western Beaufort Sea. Select a graph view tab below to explore the interactive scatter plot or the summary bar graph.
+    Explore <strong>2,391 tracking and sighting records</strong> of <strong>Whale Sharks (<em>Rhincodon typus</em>)</strong> across Australia's Coral Sea — comparing 18 satellite-tagged individuals against a decade of opportunistic sightings. Select a graph tab below to explore the interactive scatter plot or the summary bar graphs.
   </p>
 </div>
 
@@ -339,8 +299,8 @@ plot_ly(
   y = ~spotting_num,
   color = ~group,
   colors = c(
-    "Beluga Whale Detections (Beaufort Sea)" = "#38bdf8",
-    "Whale Shark Trackings (Coral Sea)" = "#0f766e"
+    "Satellite-Tagged Whale Sharks (18 Individuals)" = "#0f766e",
+    "Opportunistic Sightings (Coral Sea)" = "#0284c7"
   ),
   text = ~hover_text,
   hoverinfo = "text",
@@ -348,7 +308,7 @@ plot_ly(
   mode = "markers",
   width = "100%",
   height = 680,
-  marker = list(size = 6.5, opacity = 0.72)
+  marker = list(size = 6.5, opacity = 0.75)
 ) |>
   layout(
     autosize = TRUE,
@@ -371,7 +331,7 @@ plot_ly(
       zerolinecolor = "#cbd5e1",
       rangemode = "nonnegative",
       minallowed = 0,
-      range = c(0, 1300),
+      range = c(0, 450),
       tick0 = 0
     ),
     legend = list(orientation = "h", x = 1, xanchor = "right", y = 1.12, yanchor = "bottom"),
@@ -391,7 +351,7 @@ plot_ly(
             args = list(list(
               "xaxis.type" = "linear",
               "xaxis.range" = c(0, 135),
-              "yaxis.range" = c(0, 1300)
+              "yaxis.range" = c(0, 450)
             ))
           ),
           list(
@@ -400,20 +360,11 @@ plot_ly(
             args = list(list(
               "xaxis.type" = "log",
               "xaxis.autorange" = TRUE,
-              "yaxis.range" = c(0, 1300)
+              "yaxis.range" = c(0, 450)
             ))
           ),
           list(
-            label = "Zoom: 0–14 Months (Beluga & Tagged Whale Shark Overlap)",
-            method = "relayout",
-            args = list(list(
-              "xaxis.type" = "linear",
-              "xaxis.range" = c(0, 14),
-              "yaxis.range" = c(0, 1300)
-            ))
-          ),
-          list(
-            label = "Zoom: Tagged Whale Sharks Detail (0–14 Months, 1–450 Spottings)",
+            label = "Zoom: Tagged Whale Sharks (0–14 Months)",
             method = "relayout",
             args = list(list(
               "xaxis.type" = "linear",
@@ -422,12 +373,21 @@ plot_ly(
             ))
           ),
           list(
-            label = "Zoom: Multi-Year Whale Sharks (10–132 Months)",
+            label = "Zoom: Multi-Year Tagged Sharks (0–27 Months)",
+            method = "relayout",
+            args = list(list(
+              "xaxis.type" = "linear",
+              "xaxis.range" = c(0, 27),
+              "yaxis.range" = c(0, 450)
+            ))
+          ),
+          list(
+            label = "Zoom: Long-Term Opportunistic Sightings (10–132 Months)",
             method = "relayout",
             args = list(list(
               "xaxis.type" = "linear",
               "xaxis.range" = c(10, 135),
-              "yaxis.range" = c(0, 300)
+              "yaxis.range" = c(0, 160)
             ))
           )
         )
@@ -469,8 +429,8 @@ plot_ly(
   y = ~monthly_spottings,
   color = ~group,
   colors = c(
-    "Beluga Whale Detections (Beaufort Sea)" = "#38bdf8",
-    "Whale Shark Trackings (Coral Sea)" = "#0f766e"
+    "Satellite-Tagged Whale Sharks (18 Individuals)" = "#0f766e",
+    "Opportunistic Sightings (Coral Sea)" = "#0284c7"
   ),
   text = ~month_hover,
   hoverinfo = "text",
@@ -489,7 +449,7 @@ plot_ly(
       gridcolor = "#e2e8f0"
     ),
     yaxis = list(
-      title = "<b>Total Recorded Spottings / Detections</b>",
+      title = "<b>Total Recorded Spottings / Transmissions</b>",
       gridcolor = "#e2e8f0",
       zerolinecolor = "#cbd5e1",
       rangemode = "nonnegative",
@@ -503,7 +463,7 @@ plot_ly(
 
 <div class="plot-card">
 <div class="plot-card-header">
-  <h2 class="plot-card-title">Total Detections by Individual Organism (With Span in Months)</h2>
+  <h2 class="plot-card-title">Total Detections by Individual Whale Shark (With Span in Months)</h2>
 </div>
 ```{r}
 organism_summary <- all_occurrences |>
@@ -519,8 +479,8 @@ organism_summary <- all_occurrences |>
     common_name = fct_inorder(common_name),
     bar_hover = paste0(
       "<b>", common_name, "</b><br>",
-      "Group: ", group, "<br>",
-      "Total Spottings / Detections: <b>", scales::comma(total_spottings), "</b><br>",
+      "Observation Type: ", group, "<br>",
+      "Total Spottings / Transmissions: <b>", scales::comma(total_spottings), "</b><br>",
       "Observation Span: <b>", total_span_months, " months</b> (",
       first_seen, " to ", last_seen, ")"
     )
@@ -532,8 +492,8 @@ plot_ly(
   y = ~total_spottings,
   color = ~group,
   colors = c(
-    "Beluga Whale Detections (Beaufort Sea)" = "#38bdf8",
-    "Whale Shark Trackings (Coral Sea)" = "#0f766e"
+    "Satellite-Tagged Whale Sharks (18 Individuals)" = "#0f766e",
+    "Opportunistic Sightings (Coral Sea)" = "#0284c7"
   ),
   text = ~bar_hover,
   hoverinfo = "text",
@@ -552,12 +512,12 @@ plot_ly(
       gridcolor = "#e2e8f0"
     ),
     yaxis = list(
-      title = "<b>Total Recorded Spottings / Detections</b>",
+      title = "<b>Total Recorded Spottings / Transmissions</b>",
       gridcolor = "#e2e8f0",
       zerolinecolor = "#cbd5e1",
       rangemode = "nonnegative",
       minallowed = 0,
-      range = c(0, 1350)
+      range = c(0, 460)
     ),
     legend = list(orientation = "h", x = 1, xanchor = "right", y = 1.04, yanchor = "bottom")
   ) |>

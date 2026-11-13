@@ -1,0 +1,243 @@
+---
+title: ""
+format:
+  html:
+    page-layout: full
+    title-block-style: none
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{=html}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f3f7fa;
+  color: #1e293b;
+}
+
+#title-block-header {
+  display: none !important;
+}
+
+#quarto-content.page-columns,
+main.content.page-columns {
+  display: block !important;
+  width: 100% !important;
+  max-width: 1440px !important;
+  padding: 0 2rem 3rem 2rem !important;
+  margin: 0 auto !important;
+}
+
+.hero-banner {
+  background: linear-gradient(135deg, #07192f 0%, #0d3b66 55%, #0f766e 100%);
+  color: #ffffff;
+  padding: 2.5rem 2.5rem;
+  border-radius: 16px;
+  margin: 1.5rem 0 1.75rem 0;
+  box-shadow: 0 12px 30px rgba(7, 25, 47, 0.18);
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  background: rgba(125, 211, 252, 0.12);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.6rem 0;
+  color: #ffffff;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 920px;
+  margin: 0;
+}
+
+.map-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.map-card-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.map-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.map-caption {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.leaflet-container {
+  border-radius: 12px;
+}
+</style>
+
+<div class="hero-banner">
+  <div class="hero-eyebrow">Coral Sea Spatial Telemetry</div>
+  <h1 class="hero-title">Whale Shark Tracking & Spotting Patterns</h1>
+  <p class="hero-subtitle">
+    Explore the geographic movement corridors of <strong>Whale Sharks (<em>Rhincodon typus</em>)</strong> across Australia's Great Barrier Reef, the Coral Sea, and Papua New Guinea — combining 18 satellite-tagged trajectories with 136 opportunistic sightings.
+  </p>
+</div>
+```
+
+```{r}
+library(tidyverse)
+library(leaflet)
+
+whale_shark_raw <- read_tsv("data/whale_shark/occurrence.txt", show_col_types = FALSE)
+
+whale_shark_map <- whale_shark_raw |>
+  mutate(
+    id = as.character(id),
+    date = as.Date(eventDate),
+    shark_name = str_remove(
+      coalesce(occurrenceRemarks, "Coral Sea Sighting"),
+      "^Animal name:\\s*"
+    ),
+    track_id = coalesce(as.character(organismID), "Unmarked"),
+    is_tagged = !is.na(organismID)
+  ) |>
+  filter(!is.na(date), !is.na(decimalLatitude), !is.na(decimalLongitude)) |>
+  arrange(shark_name, eventDate, id) |>
+  mutate(
+    spotting_num = row_number(),
+    total_spottings = n(),
+    .by = c(shark_name, track_id)
+  ) |>
+  mutate(
+    popup_html = paste0(
+      "<b>Whale Shark (", shark_name, ")</b><br>",
+      "<i>Rhincodon typus</i><br>",
+      "<b>Date:</b> ", date, "<br>",
+      "<b>Sex / Life Stage:</b> ", coalesce(sex, "Unknown"), " / ", coalesce(lifeStage, "Unknown"), "<br>",
+      "<b>Spotting #:</b> ", spotting_num, " of ", total_spottings, "<br>",
+      "<b>Location:</b> (", round(decimalLatitude, 3), "°, ", round(decimalLongitude, 3), "°)"
+    )
+  )
+
+tagged_points <- whale_shark_map |> filter(is_tagged)
+sighting_points <- whale_shark_map |> filter(!is_tagged)
+
+shark_map <- leaflet(width = "100%", height = "620px") |>
+  addProviderTiles(providers$Esri.OceanBasemap, group = "Ocean Basemap") |>
+  addProviderTiles(providers$CartoDB.Positron, group = "Clean Light Map")
+
+tagged_sharks <- tagged_points |> split(~shark_name)
+
+for (shark_df in tagged_sharks) {
+  shark_map <- shark_map |>
+    addPolylines(
+      data = shark_df,
+      lng = ~decimalLongitude,
+      lat = ~decimalLatitude,
+      color = "#0f766e",
+      weight = 2.2,
+      opacity = 0.6,
+      group = "Satellite Trajectories (18 Sharks)",
+      label = ~paste0("Track: Whale Shark (", shark_name, ")")
+    )
+}
+
+shark_map <- shark_map |>
+  addCircleMarkers(
+    data = tagged_points,
+    lng = ~decimalLongitude,
+    lat = ~decimalLatitude,
+    radius = 4.5,
+    color = "#0d5c56",
+    fillColor = "#14b8a6",
+    fillOpacity = 0.8,
+    weight = 1,
+    popup = ~popup_html,
+    label = ~paste0("Whale Shark (", shark_name, ") — ", date),
+    group = "Satellite Tag Points (2,255 pts)"
+  ) |>
+  addCircleMarkers(
+    data = sighting_points,
+    lng = ~decimalLongitude,
+    lat = ~decimalLatitude,
+    radius = 5.5,
+    color = "#0369a1",
+    fillColor = "#38bdf8",
+    fillOpacity = 0.85,
+    weight = 1.5,
+    popup = ~popup_html,
+    label = ~paste0("Opportunistic Sighting — ", date),
+    group = "Opportunistic Sightings (136 pts)"
+  ) |>
+  addLegend(
+    position = "bottomright",
+    colors = c("#14b8a6", "#0f766e", "#38bdf8"),
+    labels = c(
+      "Satellite Tag Points (2,255)",
+      "Individual Shark Trajectories (18)",
+      "Opportunistic Sightings (136)"
+    ),
+    title = "Coral Sea Whale Sharks",
+    opacity = 0.9
+  ) |>
+  addLayersControl(
+    baseGroups = c("Ocean Basemap", "Clean Light Map"),
+    overlayGroups = c(
+      "Satellite Tag Points (2,255 pts)",
+      "Satellite Trajectories (18 Sharks)",
+      "Opportunistic Sightings (136 pts)"
+    ),
+    options = layersControlOptions(collapsed = FALSE)
+  ) |>
+  fitBounds(
+    lng1 = min(whale_shark_map$decimalLongitude) - 0.8,
+    lat1 = min(whale_shark_map$decimalLatitude) - 0.8,
+    lng2 = max(whale_shark_map$decimalLongitude) + 0.8,
+    lat2 = max(whale_shark_map$decimalLatitude) + 0.8
+  )
+```
+
+<div class="map-card">
+<div class="map-card-header">
+  <h2 class="map-card-title">Coral Sea Whale Shark Trajectories & Sightings (Australia & Papua New Guinea)</h2>
+</div>
+```{r}
+shark_map
+```
+<div class="map-caption">
+  <strong>Spatial Pattern:</strong> <strong>2,391 GPS & sighting points</strong> stretch from southern Queensland (<code>27.9° S</code>) across the Great Barrier Reef and Coral Sea into Papua New Guinea waters (<code>6.3° S</code>). Use the layer checkboxes in the top-right corner of the map to toggle satellite tracks, tagged points, and opportunistic sightings, or click any point for individual shark details.
+</div>
+</div>

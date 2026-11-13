@@ -90,21 +90,10 @@ main.content.page-columns {
   <div class="hero-eyebrow">Methodology & Data Guide</div>
   <h1 class="hero-title">About the Whale Shark & Beluga Whale Graphic</h1>
   <p class="hero-subtitle">
-    Understanding the datasets, axes, ecological patterns, and interactive controls behind the visualization.
+    Understanding the axes and interactive controls behind the visualization.
   </p>
 </div>
 ```
-
-<div class="info-card">
-
-## Overview of the Datasets
-
-This project compares observation timelines and tracking patterns between two iconic marine species in contrasting ocean environments:
-
-1. **Whale Sharks (*Rhincodon typus*) in the Coral Sea (Australia):** **2,391 observations** collected by the Biopixel Oceans Foundation and James Cook University, combining satellite tag transmissions from 18 named whale sharks (such as *Megashark*, *Alexios*, *Ali*, and *Sharpie*) with 136 opportunistic Coral Sea sightings.
-2. **Beluga Whales (*Delphinapterus leucas*) in the Western Beaufort Sea (Arctic):** **1,244 acoustic detections** recorded by a moored underwater hydrophone (`Aural_M2`) from the University of Washington between September 2010 and August 2011.
-
-</div>
 
 <div class="info-card">
 
@@ -116,20 +105,6 @@ This project compares observation timelines and tracking patterns between two ic
   Counts each new detection in chronological order ($1, 2, 3, \dots, N$). A steep upward curve means frequent detections over a short period, while a flatter curve means detections were spread out over a longer time span.
 - **Color Grouping:**  
   Dark teal points represent **Whale Shark Trackings (Coral Sea)** and light blue points represent **Beluga Whale Detections (Beaufort Sea)**.
-
-</div>
-
-<div class="info-card">
-
-## Ecological Patterns in the Plot
-
-- **Seasonal Bursts in Beluga Detections (Light Blue Curve):**  
-  The Beluga Whale acoustic curve climbs to 1,244 detections over roughly 331 days. Rather than rising at a constant rate, it shows steep steps during autumn and summer migration windows through the Beaufort Sea, separated by a flat horizontal gap during the mid-winter months when Belugas move away from heavy pack ice.
-- **Individual Whale Shark Trajectories (Dark Teal Curves):**  
-  Each tagged whale shark forms its own distinct trajectory starting at Day 0:
-  - *High-frequency satellite tracks* like **Megashark** (423 transmissions over ~397 days) and **Alexios** (357 transmissions over ~158 days) climb rapidly as their satellite tags report locations regularly.
-  - *Multi-year tracks* like **Ali** (273 transmissions across 770 days) and **Blancpain** (73 transmissions across 526 days) show intermittent bursts when the sharks surface long enough to transmit to satellites.
-  - *Opportunistic Coral Sea Sightings* extend across more than 10 years (4,006 days), forming a long, gradual line across the bottom of the chart.
 
 </div>
 

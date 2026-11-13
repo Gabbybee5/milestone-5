@@ -87,51 +87,43 @@ main.content.page-columns {
 </style>
 
 <div class="hero-banner">
-  <div class="hero-eyebrow">Ecological & Scientific Context</div>
-  <h1 class="hero-title">Why Compare Whale Sharks and Beluga Whales?</h1>
+  <div class="hero-eyebrow">Ecological & Conservation Context</div>
+  <h1 class="hero-title">Whale Shark Ecology & Conservation in the Coral Sea</h1>
   <p class="hero-subtitle">
-    Examining how two large marine vertebrates navigate extreme climate differences, seasonal migrations, and biological adaptations.
+    Understanding how the world's largest fish uses tropical reef corridors, why satellite tags show surface bursts and deep-water gaps, and why international protection matters.
   </p>
 </div>
 ```
 
 <div class="info-card">
 
-## 1. Climate Differences: Tropical Coral Sea vs. Polar Arctic Waters
+## 1. Filter-Feeding Giants in a Tropical Ocean
 
-Comparing **Whale Sharks (*Rhincodon typus*)** in Australia's Coral Sea with **Beluga Whales (*Delphinapterus leucas*)** in the Western Beaufort Sea highlights how ocean temperature and seasonal environmental barriers shape marine movement:
+As the world's largest living fish (*Rhincodon typus*), whale sharks are ectothermic (cold-blooded) filter feeders that navigate warm tropical and subtropical seas in search of dense prey patches:
 
-- **Tropical & Subtropical Warm Waters (Whale Sharks):** Whale sharks inhabit warm waters across the Coral Sea where sea-surface temperatures remain relatively stable year-round. Because their habitat never freezes over, individuals can be tracked across every season, driven primarily by plankton blooms and coral/fish spawning aggregations rather than ice cover.
-- **Extreme Polar Sea-Ice Cycles (Beluga Whales):** Beluga whales live in freezing Arctic waters where expanding winter pack ice physically closes off parts of the Beaufort Sea for months at a time. On our graphic, this climate constraint appears directly in the data as sharp seasonal bursts of detections followed by a long winter gap when sea ice forces the whales elsewhere.
-
-</div>
-
-<div class="info-card">
-
-## 2. Migration Patterns & Movement Behavior
-
-Both organisms undertake large-scale movements, yet their migration strategies look completely different when plotted over elapsed days:
-
-- **Predictable Seasonal Corridors (Belugas):** Beluga whales migrate in tightly coordinated seasonal pulses along Arctic shelf breaks as sea ice retreats in late spring/summer and forms again in autumn. A single fixed mooring (`Aural_M2`) records hundreds of acoustic detections in concentrated windows as pods pass through the corridor.
-- **Wide-Ranging Oceanic Foraging (Whale Sharks):** Tagged whale sharks travel individually across deep coral sea basins and continental shelves. Some sharks (like *Megashark* and *Alexios*) remain in active surface-tracking range for hundreds of transmissions within a single year, while others (like *Ali* and *Blancpain*) dive deep or travel across remote ocean regions for months between satellite uplinks.
+- **Spawning Aggregation Hotspots:** During late spring and austral summer (November–February), whale sharks gather along outer reefs of the northern Great Barrier Reef and Coral Sea to feed on zooplankton blooms and mass fish and coral spawning events.
+- **Surface Thermoregulation:** After diving into deep, cooler ocean layers to forage, whale sharks return to sun-warmed surface waters to warm their bodies — creating the exact windows when fin-mounted satellite tags break the surface and uplink GPS locations.
 
 </div>
 
 <div class="info-card">
 
-## 3. Different Species & Biological Adaptations
+## 2. Cross-Border Ocean Roaming
 
-Placing these two species side by side contrasts two fundamentally different evolutionary branches of marine megafauna:
+The trajectories on the **Tracking Patterns** map show that Coral Sea whale sharks do not stay inside a single reef or national boundary:
 
-- **Ectothermic Filter-Feeding Fish (Whale Shark):** As the world's largest fish (a cartilaginous elasmobranch), the whale shark breathes through gills and relies on warm water temperatures to regulate its metabolism after deep, cold foraging dives. When it returns to warm surface waters to thermoregulate and feed on surface plankton, its satellite tag can transmit its location.
-- **Endothermic Air-Breathing Mammal (Beluga Whale):** As a toothed cetacean adapted to sub-zero Arctic waters, the beluga has thick blubber, lacks a dorsal fin (allowing it to swim safely beneath sea ice), and relies heavily on vocalizations and echolocation clicks to navigate dark, ice-covered waters — making passive underwater acoustic hydrophones the ideal way to detect them even when surface sightings are impossible.
+- **From Reef Shelves to Deep Basins:** Tagged individuals travel across deep oceanic trenches between Queensland's continental shelf, remote Coral Sea seamounts, and Papua New Guinea waters.
+- **Subadult Male Dominance:** Like many coastal whale shark aggregations worldwide, a large share of the tagged Coral Sea individuals are immature and subadult sharks using productive shelf edges to fuel rapid growth before dispersing into the wider Indo-Pacific.
 
 </div>
 
 <div class="info-card">
 
-## 4. Why This Comparison Matters for Conservation
+## 3. Why Satellite Telemetry Matters for Conservation
 
-Studying tropical telemetry alongside Arctic acoustic monitoring shows how **climate warming affects both poles and tropics simultaneously**: shifting ocean currents and warming waters alter plankton hotspots for Coral Sea whale sharks, while shrinking Arctic sea ice transforms migration timing and underwater noise exposure for Beaufort Sea beluga whales.
+Whale sharks are listed as **Endangered** globally on the IUCN Red List due to vessel strikes, fisheries bycatch, and changing ocean temperatures:
+
+- **Pinpointing High-Risk Shipping Lanes:** High-density tracking paths reveal where seasonal surface-feeding hotspots overlap with commercial shipping corridors along northeastern Australia and Papua New Guinea.
+- **Protecting Connected Marine Parks:** Because individual sharks like *Megashark* and *Ali* roam across hundreds of kilometers over multiple years, effective conservation depends on linking Australia's Great Barrier Reef and Coral Sea Marine Parks with neighboring Pacific protections.
 
 </div>
